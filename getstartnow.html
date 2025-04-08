@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Get Started</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body,
+        html {
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: white;
+        }
+        /* Background animation */
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(63, 94, 251, 0.4), rgba(252, 70, 107, 0.3), transparent);
+            animation: moveBg 20s linear infinite;
+            z-index: -2;
+        }
+        
+        @keyframes moveBg {
+            0% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(-50%, -50%);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+        
+        .get-started-section {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            background: linear-gradient(120deg, #1e3c72, #2a5298);
+        }
+        
+        .get-started-section::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?fit=crop&w=1600&q=80') center/cover no-repeat;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            animation: fadeIn 2s ease forwards;
+            opacity: 0;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .content h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            background: linear-gradient(45deg, #ff416c, #ee583e);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        
+        .content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #ddd;
+        }
+        
+        .get-started-btn {
+            padding: 15px 35px;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.6);
+        }
+        
+        .get-started-btn::before {
+            content: '';
+            position: absolute;
+            width: 300%;
+            height: 300%;
+            top: -100%;
+            left: -100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+        
+        .get-started-btn:hover::before {
+            top: 100%;
+            left: 100%;
+        }
+        
+        .get-started-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 65, 108, 0.8);
+        }
+        /* Loader */
+        
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f2027;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .loader::after {
+            content: "";
+            width: 50px;
+            height: 50px;
+            border: 5px solid #fff;
+            border-top: 5px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Loader -->
+    <div class="loader" id="loader"></div>
+
+    <!-- Get Started Section -->
+    <section class="get-started-section">
+        <div class="content">
+            <h1>Welcome to Your Library 📖</h1>
+            <p>Organize your library, manage members, and track your books easily.</p>
+            <button class="get-started-btn" onclick="goToBooks()">Login</button>
+            <button class="get-started-btn" onclick="goToBooks2()">Sign Up</button>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script>
+        function goToBooks() {
+            // Show loader
+            document.getElementById('loader').style.display = 'flex';
+            // Redirect after short delay
+            setTimeout(() => {
+                window.location.href = 'loginfile.html'; // Apni books page ka actual path
+            }, 1500);
+        }
+
+        function goToBooks2() {
+            // Show loader
+            document.getElementById('loader').style.display = 'flex';
+            // Redirect after short delay
+            setTimeout(() => {
+                window.location.href = 'signup.html'; // Apni books page ka actual path
+            }, 1500);
+        }
+    </script>
+
+</body>
+
+</html>

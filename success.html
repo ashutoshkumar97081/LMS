@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Created Successfully</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        
+        .success-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(10px);
+            width: 350px;
+            animation: fadeIn 1s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .success-container h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .success-container p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: #ccc;
+        }
+        
+        .success-container a {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #1e90ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+        
+        .success-container a:hover {
+            background: #1c86ee;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="success-container">
+        <h1>Account Created Successfully!</h1>
+        <p>Welcome to your Library Portal. You can now login and explore.</p>
+        <a href="loginfile.html">Go to Login Page</a>
+    </div>
+
+</body>
+
+</html>
