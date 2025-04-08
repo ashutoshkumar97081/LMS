@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="toggle-mode">
+            <label>
+        <input type="checkbox" id="modeToggle">
+        <span>🌙 Dark Mode</span>
+      </label>
+        </div>
+
+        <form class="login-form" id="loginForm">
+            <h2>Login</h2>
+
+            <div class="input-group">
+                <input type="email" id="email" placeholder="Email" required />
+            </div>
+
+            <div class="input-group password-group">
+                <input type="password" id="password" placeholder="Password" required />
+                <span class="toggle-password" onclick="togglePassword()">👁️</span>
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <div class="loader" id="loader"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

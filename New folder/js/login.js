@@ -1,56 +1,77 @@
-document.getElementById('loginForm').addEventListener('submit', function(e) {
+// Toggle password visibility
+document.getElementById('toggleLoginPassword') ? .addEventListener('click', function() {
+    const passwordField = document.getElementById('loginPassword');
+    passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
+});
+
+document.getElementById('toggleSignupPassword') ? .addEventListener('click', function() {
+    const passwordField = document.getElementById('signupPassword');
+    passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
+});
+
+// Signup logic
+document.getElementById('signupForm') ? .addEventListener('submit', function(e) {
     e.preventDefault();
 
-    var username = document.getElementById('username').value.trim();
-    var password = document.getElementById('password').value.trim();
+    const signupId = document.getElementById('signupId').value.trim();
+    const signupPassword = document.getElementById('signupPassword').value.trim();
+    const message = document.getElementById('signupMessage');
 
-    if (username === '' || password === '') {
-        alert("Please fill in both fields.");
+    if (!signupId || !signupPassword) {
+        message.style.color = 'red';
+        message.textContent = 'Please fill in all fields.';
         return;
     }
 
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
+    let users = JSON.parse(localStorage.getItem('users')) || [];
 
-        var username = document.getElementById('username').value.trim();
-        var password = document.getElementById('password').value.trim();
+    const userExists = users.some(user => user.id === signupId);
 
-        if (username === '' || password === '') {
-            alert("Please fill in both fields.");
-            return;
-        }
+    if (userExists) {
+        message.style.color = 'red';
+        message.textContent = 'User already exists!';
+        return;
+    }
 
-        // Show success message
-        document.getElementById('message').innerText = "Login Successful!";
+    users.push({ id: signupId, password: signupPassword });
+    localStorage.setItem('users', JSON.stringify(users));
 
-        // Create a workbook with SheetJS
-        var wb = XLSX.utils.book_new();
-        var ws_data = [
-            ["Username", "Password"],
-            [username, password]
-        ];
-        var ws = XLSX.utils.aoa_to_sheet(ws_data);
-        XLSX.utils.book_append_sheet(wb, ws, "Credentials");
+    message.style.color = 'green';
+    message.textContent = 'Signup successful! Redirecting to login...';
 
-        // Write file and trigger download
-        XLSX.writeFile(wb, "user_credentials.xlsx");
-    });
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 2000);
+});
 
+// Login logic
+document.getElementById('loginForm') ? .addEventListener('submit', function(e) {
+    e.preventDefault();
 
-    // Simulate login success for demonstration purposes
-    document.getElementById('message').innerText = "Login Successful!";
+    const loginId = document.getElementById('loginId').value.trim();
+    const loginPassword = document.getElementById('loginPassword').value.trim();
+    const message = document.getElementById('loginMessage');
 
-    // Create CSV content with the username and password.
-    // This CSV file can be opened in Excel.
-    var csvContent = "data:text/csv;charset=utf-8,Username,Password\n" +
-        username + "," + password;
+    const users = JSON.parse(localStorage.getItem('users')) || [];
 
-    // Create a temporary download link and trigger the download.
-    var encodedUri = encodeURI(csvContent);
-    var link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "user_credentials.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const user = users.find(user => user.id === loginId);
+
+    if (!user) {
+        message.style.color = 'red';
+        message.textContent = 'College Login ID incorrect!';
+        return;
+    }
+
+    if (user.password !== loginPassword) {
+        message.style.color = 'red';
+        message.textContent = 'Password incorrect!';
+        return;
+    }
+
+    message.style.color = 'green';
+    message.textContent = 'Login successful! Redirecting...';
+
+    setTimeout(() => {
+        window.location.href = 'home.html'; // ✅ Replace with your home page
+    }, 2000);
 });

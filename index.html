@@ -192,7 +192,7 @@
 
     <header>
         <section class="book-list">
-            <input type="text" id="searchInput" placeholder="Search by title or author..." onkeyup="searchBooks()" />
+            <input type="text" id="searchInput" placeholder="Search Books...">
         </section>
         <h1>Library Management System</h1>
         <nav>
@@ -246,6 +246,24 @@
             }
         }
     </script>
+    <script>
+        const searchBox = document.getElementById('searchBox');
+        const bookCards = document.querySelectorAll('.book-card');
+
+        searchBox.addEventListener('input', function(e) {
+            const value = e.target.value.toLowerCase();
+            bookCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const category = card.querySelector('.category').textContent.toLowerCase();
+                if (title.includes(value) || category.includes(value)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

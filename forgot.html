@@ -145,19 +145,13 @@
 
 <body>
     <div class="container">
-        <h2>Signup</h2>
-        <form id="signupForm">
-            <input type="text" id="signupId" placeholder="College Login ID" required />
-            <div class="password-field">
-                <input type="password" id="signupPassword" placeholder="Password" required />
-                <span id="toggleSignupPassword">👁️</span>
-            </div>
-            <div class="strength">
-                <span>Password Strength: </span><strong id="passwordStrength">None</strong>
-            </div>
-            <button type="submit">Signup</button>
-            <p class="message" id="signupMessage"></p>
-            <p>Already have an account? <a href="loginfile.html">Login here</a></p>
+        <h2>Forgot Password</h2>
+        <form id="forgotForm">
+            <input type="text" id="forgotId" placeholder="College Login ID" required />
+            <input type="password" id="newPassword" placeholder="New Password" required />
+            <button type="submit">Reset Password</button>
+            <p class="message" id="forgotMessage"></p>
+            <p>Remembered your password? <a href="index.html">Login here</a></p>
         </form>
     </div>
     <!-- Linking JS file for full functionality -->

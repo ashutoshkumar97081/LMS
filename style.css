@@ -576,7 +576,7 @@ footer {
     box-shadow: 0 6px 20px rgba(30, 60, 114, 0.8);
 }
 
-<style>.loader {
+.loader {
     position: fixed;
     top: 0;
     left: 0;
@@ -608,4 +608,37 @@ footer {
     }
 }
 
-</style>
+.highlight {
+    background-color: yellow;
+    padding: 2px 4px;
+    border-radius: 4px;
+    color: black;
+}
+
+.highlight {
+    background-color: yellow;
+    padding: 2px 4px;
+    border-radius: 4px;
+    animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 5px yellow;
+    }
+    to {
+        box-shadow: 0 0 15px orange;
+    }
+}
+
+.no-results {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}
+
+.no-results {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}
