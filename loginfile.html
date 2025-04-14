@@ -164,11 +164,48 @@
                 <button type="submit">Login</button>
                 <p class="message" id="loginMessage"></p>
                 <p><a href="forgot.html">Forgot Password?</a></p>
-                <p>Don't have an account? <a href="signup.html">Signup here</a></p>
+                <p>Don't have an account? <a href="./signup.html">Signup here</a></p>
             </form>
         </div>
         <!-- Linking JS file for full functionality -->
         <script src="script.js"></script>
+        <script>
+            document.getElementById('loginForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const loginId = document.getElementById('loginId').value.trim();
+                const loginPassword = document.getElementById('loginPassword').value.trim();
+
+                try {
+                    const response = await fetch('http://localhost:3000/users');
+                    const users = await response.json();
+
+                    const validUser = users.find(user => user.id === loginId && user.password === loginPassword);
+
+                    const message = document.getElementById('loginMessage');
+
+                    if (validUser) {
+                        message.textContent = 'Login Successful!';
+                        message.className = 'message success';
+
+                        localStorage.setItem('activeUser', JSON.stringify(validUser));
+
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 1000);
+                    } else {
+                        message.textContent = 'Invalid ID or Password!';
+                        message.className = 'message error';
+                    }
+                } catch (error) {
+                    document.getElementById('loginMessage').textContent = 'Error connecting to server.';
+                    document.getElementById('loginMessage').className = 'message error';
+                    console.error(error);
+                }
+            });
+        </script>
+
+
     </body>
 
 </html>

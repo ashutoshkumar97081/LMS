@@ -144,16 +144,25 @@
 </head>
 
 <body>
-    <div class="container">
-        <h2>Forgot Password</h2>
+    <!-- Forgot Password Page -->
+    <div class="container" id="forgotPage" <h2>Forgot Password</h2>
         <form id="forgotForm">
             <input type="text" id="forgotId" placeholder="College Login ID" required />
-            <input type="password" id="newPassword" placeholder="New Password" required />
+
+            <div id="securitySection" style="display: none;">
+                <p id="securityQuestion"></p>
+                <input type="text" id="forgotAnswer" placeholder="Your Answer" required />
+                <input type="password" id="newPassword" placeholder="New Password" required />
+            </div>
+
             <button type="submit">Reset Password</button>
             <p class="message" id="forgotMessage"></p>
-            <p>Remembered your password? <a href="index.html">Login here</a></p>
+            <p>Remembered your password? <a href="loginfile.html" onclick="showPage('login')">Login here</a></p>
         </form>
     </div>
+    <div class="toast" id="toast"></div>
+
+
     <!-- Linking JS file for full functionality -->
     <script src="script.js"></script>
 </body>

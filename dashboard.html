@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Dashboard - Professional</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: white;
+            text-align: center;
+        }
+        
+        h1 {
+            margin-bottom: 10px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #4caf50;
+            color: white;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #43a047;
+        }
+        
+        form {
+            margin: 20px auto;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        input {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        table {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        th {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            table,
+            form {
+                width: 100%;
+            }
+            table th,
+            table td {
+                font-size: 12px;
+            }
+        }
+        
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .logout-btn {
+            background: #ff5252;
+        }
+        
+        .logout-btn:hover {
+            background: #e04848;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>📚 Library Dashboard</h1>
+    <p id="welcomeMessage">Loading...</p>
+
+    <button class="logout-btn" onclick="logout()">Logout</button>
+
+    <!-- Add New Book -->
+    <h2>📖 Add New Book</h2>
+    <form id="bookForm">
+        <input type="text" id="title" placeholder="Title" required />
+        <input type="text" id="author" placeholder="Author" required />
+        <input type="number" id="year" placeholder="Year" required />
+        <input type="text" id="genre" placeholder="Genre" required />
+        <button type="submit">Add Book</button>
+    </form>
+
+    <h2>📚 Book List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Year</th>
+                <th>Genre</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="bookList"></tbody>
+    </table>
+
+    <!-- Issue Book Section -->
+    <h2>📝 Issue Book</h2>
+    <form id="issueForm">
+        <input type="text" id="studentName" placeholder="Student Name" required />
+        <input type="text" id="libraryId" placeholder="Library ID" required />
+        <input type="date" id="issueDate" required />
+        <input type="date" id="returnDate" required />
+        <button type="submit">Issue Book</button>
+    </form>
+
+    <h2>📑 Issued Books</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Library ID</th>
+                <th>Issue Date</th>
+                <th>Return Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="issueList"></tbody>
+    </table>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const activeUser = JSON.parse(localStorage.getItem('activeUser'));
+        const welcomeMessage = document.getElementById('welcomeMessage');
+
+        if (activeUser && activeUser.id) {
+            welcomeMessage.textContent = `Welcome, ${activeUser.id}! 🎉`;
+        } else {
+            window.location.href = './loginfile.html';
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast show';
+            setTimeout(() => {
+                toast.className = toast.className.replace('show', '');
+            }, 3000);
+        }
+
+        function logout() {
+            localStorage.removeItem('activeUser');
+            window.location.href = './loginfile.html';
+        }
+
+        // --- Book Functions ---
+        async function loadBooks() {
+            const response = await fetch('http://localhost:3000/books');
+            const books = await response.json();
+            const bookList = document.getElementById('bookList');
+            bookList.innerHTML = '';
+            books.forEach((book, index) => {
+                bookList.innerHTML += `<tr>
+          <td>${book.title}</td>
+          <td>${book.author}</td>
+          <td>${book.year}</td>
+          <td>${book.genre}</td>
+          <td><button onclick="removeBook(${index})">Remove ❌</button></td>
+        </tr>`;
+            });
+        }
+
+        document.getElementById('bookForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const title = document.getElementById('title').value.trim();
+            const author = document.getElementById('author').value.trim();
+            const year = document.getElementById('year').value.trim();
+            const genre = document.getElementById('genre').value.trim();
+
+            const response = await fetch('http://localhost:3000/books', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    title,
+                    author,
+                    year,
+                    genre
+                })
+            });
+
+            const data = await response.json();
+            showToast(data.message);
+            this.reset();
+            loadBooks();
+        });
+
+        async function removeBook(index) {
+            const response = await fetch(`http://localhost:3000/books/${index}`, {
+                method: 'DELETE'
+            });
+            const data = await response.json();
+            showToast(data.message);
+            loadBooks();
+        }
+
+        // --- Issue Functions ---
+        async function loadIssues() {
+            const response = await fetch('http://localhost:3000/issues');
+            const issues = await response.json();
+            const issueList = document.getElementById('issueList');
+            issueList.innerHTML = '';
+            issues.forEach((issue, index) => {
+                issueList.innerHTML += `<tr>
+          <td>${issue.studentName}</td>
+          <td>${issue.libraryId}</td>
+          <td>${issue.issueDate}</td>
+          <td>${issue.returnDate}</td>
+          <td><button onclick="removeIssue(${index})">Remove ❌</button></td>
+        </tr>`;
+            });
+        }
+
+        document.getElementById('issueForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const studentName = document.getElementById('studentName').value.trim();
+            const libraryId = document.getElementById('libraryId').value.trim();
+            const issueDate = document.getElementById('issueDate').value;
+            const returnDate = document.getElementById('returnDate').value;
+
+            const response = await fetch('http://localhost:3000/issues', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    studentName,
+                    libraryId,
+                    issueDate,
+                    returnDate
+                })
+            });
+
+            const data = await response.json();
+            showToast(data.message);
+            this.reset();
+            loadIssues();
+        });
+
+        async function removeIssue(index) {
+            const response = await fetch(`http://localhost:3000/issues/${index}`, {
+                method: 'DELETE'
+            });
+            const data = await response.json();
+            showToast(data.message);
+            loadIssues();
+        }
+        async function searchAndHighlightBook() {
+            const searchQuery = localStorage.getItem('searchQuery');
+
+            if (!searchQuery) return; // अगर कोई search नहीं है तो skip
+
+            const response = await fetch('http://localhost:3000/books');
+            const books = await response.json();
+
+            const bookIndex = books.findIndex(book => book.title.toLowerCase().includes(searchQuery));
+
+            if (bookIndex === -1) {
+                showToast('Book not found!');
+                localStorage.removeItem('searchQuery');
+                return;
+            }
+
+            // Wait for table to load
+            setTimeout(() => {
+                const rows = document.querySelectorAll('#bookList tr');
+                const targetRow = rows[bookIndex];
+                if (targetRow) {
+                    targetRow.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                    targetRow.style.backgroundColor = '#ffeb3b'; // Highlight yellow
+                    showToast('Book found and highlighted!');
+                }
+                localStorage.removeItem('searchQuery');
+            }, 500);
+        }
+
+
+        // Initial load
+        loadBooks();
+        loadIssues();
+        loadBooks().then(() => searchAndHighlightBook());
+        loadIssues();
+        setTimeout(() => {
+            targetRow.style.backgroundColor = '';
+        }, 3000);
+    </script>
+</body>
+
+</html>

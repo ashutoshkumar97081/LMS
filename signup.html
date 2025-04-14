@@ -144,24 +144,131 @@
 </head>
 
 <body>
-    <div class="container">
+    <!-- Signup Page -->
+    <div class="container" id="signupPage">
         <h2>Signup</h2>
         <form id="signupForm">
             <input type="text" id="signupId" placeholder="College Login ID" required />
+
             <div class="password-field">
                 <input type="password" id="signupPassword" placeholder="Password" required />
-                <span id="toggleSignupPassword">👁️</span>
+                <span id="toggleSignupPassword" style="cursor: pointer;"></span>
             </div>
-            <div class="strength">
-                <span>Password Strength: </span><strong id="passwordStrength">None</strong>
-            </div>
+
+            <select id="signupQuestion" required>
+        <option value="">Select Security Question</option>
+        <option value="Your Birth Year?">Your Birth Year?</option>
+        <option value="Your Favorite Color?">Your Favorite Color?</option>
+        <option value="Your Pet's Name?">Your Pet's Name?</option>
+      </select>
+
+            <input type="text" id="signupAnswer" placeholder="Security Answer" required />
+
             <button type="submit">Signup</button>
             <p class="message" id="signupMessage"></p>
-            <p>Already have an account? <a href="loginfile.html">Login here</a></p>
+            <p>Already have an account? <a href="./loginfile.html" onclick="showPage('loginfile')">Login here</a></p>
         </form>
     </div>
+    <div class="toast" id="toast"></div>
+
     <!-- Linking JS file for full functionality -->
     <script src="script.js"></script>
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('signupId').value.trim();
+            const password = document.getElementById('signupPassword').value.trim();
+            const question = document.getElementById('signupQuestion').value.trim();
+            const answer = document.getElementById('signupAnswer').value.trim();
+
+            // Simple validation
+            if (!id || !password || !question || !answer) {
+                document.getElementById('signupMessage').textContent = 'Please fill all fields!';
+                document.getElementById('signupMessage').className = 'message error';
+                return;
+            }
+
+            // Get existing users from localStorage
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+
+            // Check if user already exists
+            const existingUser = users.find(user => user.id === id);
+            if (existingUser) {
+                document.getElementById('signupMessage').textContent = 'User already exists!';
+                document.getElementById('signupMessage').className = 'message error';
+                return;
+            }
+
+            // Add new user
+            users.push({
+                id,
+                password,
+                question,
+                answer
+            });
+
+            localStorage.setItem('users', JSON.stringify(users));
+
+            document.getElementById('signupMessage').textContent = 'Signup Successful!';
+            document.getElementById('signupMessage').className = 'message success';
+
+            // Optional: Redirect after short delay
+            setTimeout(() => {
+                window.location.href = './loginfile.html';
+            }, 1000);
+        });
+    </script>
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('signupId').value.trim();
+            const password = document.getElementById('signupPassword').value.trim();
+            const question = document.getElementById('signupQuestion').value.trim();
+            const answer = document.getElementById('signupAnswer').value.trim();
+
+            if (!id || !password || !question || !answer) {
+                showMessage('Please fill all fields!', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id,
+                        password,
+                        question,
+                        answer
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage(data.message, 'success');
+                    setTimeout(() => {
+                        window.location.href = './loginfile.html';
+                    }, 1000);
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('Error connecting to server.', 'error');
+            }
+        });
+
+        function showMessage(message, type) {
+            const msgElement = document.getElementById('signupMessage');
+            msgElement.textContent = message;
+            msgElement.className = `message ${type}`;
+        }
+    </script>
+
 </body>
 
 </html>
